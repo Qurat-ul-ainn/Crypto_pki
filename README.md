@@ -285,31 +285,29 @@ sudo cp "/var/www/html/index.html" "/var/www/SeedDev/"
 
 ![task4a](https://github.com/Qurat-ul-ainn/Crypto_pki/blob/main/21.PNG)
 
-Now make directory ssl in /etc/apache2 & copy crt.pem key.pem in it
-
+Now make directory ssl in ```/etc/apache2``` & copy ```crt.pem``` ``` key.pem``` in it
+```
 cd /etc/apache2/
 sudo mkdir ssl
 cp server.crt crt.pem
 cp server.key key.pem
 sudo mv "/home/seed/PKI/crt.pem" "/etc/apache2/ssl"
 sudo mv "/home/seed/PKI/key.pem" "/etc/apache2/ssl"
-
-![task4b](https://github.com/Asad-Ali-Code/Public-Key-Infrastructure/blob/main/task4b.PNG)
-
-![task4c](https://github.com/Asad-Ali-Code/Public-Key-Infrastructure/blob/main/task4c.PNG)
+```
+![task4b](https://github.com/Qurat-ul-ainn/Crypto_pki/blob/main/22.PNG)
 
 Open configuration file of Apache HTTPS server:
-
+```
 sudo vi /etc/apache2/sites-available/000-default.conf
-
+```
 Add the entry and save:
-
+```
 <VirtualHost *:80>
 ServerName seedpkilab2020.com
-DocumentRoot /var/www/seedpki
+DocumentRoot /var/www/SeedDev
 DirectoryIndex index.html
 </VirtualHost>
-
+```
 
 ![task4d](https://github.com/Asad-Ali-Code/Public-Key-Infrastructure/blob/main/task4d.PNG)
 
