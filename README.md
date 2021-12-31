@@ -5,6 +5,6 @@ Instruction: https://seedsecuritylabs.org/Labs_16.04/PDF/Crypto_MD5_Collision.pd
 
 Copy the configuration file into current directory:
 
-'''cp /usr/lib/ssl/openssl.cnf ./openssl.cnf '''
+```cp /usr/lib/ssl/openssl.cnf ./openssl.cnf```
 
-create new sub-directories and files according to what it specifies in its '''[ CA_default ]''' section:
+create new sub-directories and files according to what it specifies in its ```[ CA_default ]``` section:
