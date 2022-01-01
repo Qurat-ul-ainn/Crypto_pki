@@ -309,14 +309,14 @@ DirectoryIndex index.html
 </VirtualHost>
 ```
 
-![task4d](https://github.com/Asad-Ali-Code/Public-Key-Infrastructure/blob/main/task4d.PNG)
+![task4d](https://github.com/Qurat-ul-ainn/Crypto_pki/blob/main/24.PNG)
 
 Open configuration file of Apache HTTPS SSL server:
-
+```
 sudo vi /etc/apache2/sites-available/default-ssl.conf
-
+```
 Add the entry and save:
-
+```
 <VirtualHost *:443>
 ServerName seedpkilab2020.com
 DocumentRoot /var/www/seedpki
@@ -325,12 +325,12 @@ SSLEngine On
 SSLCertificateFile /etc/apache2/ssl/cert.pem
 SSLCertificateKeyFile /etc/apache2/ssl/key.pem
 </VirtualHost>
+```
 
-
-![task4e](https://github.com/Asad-Ali-Code/Public-Key-Infrastructure/blob/main/task4e.PNG)
+![task4e](https://github.com/Qurat-ul-ainn/Crypto_pki/blob/main/26.PNG)
 
 Test the Apache configuration file for errors
-
+```
 sudo apachectl configtest
 
 Enable the SSL module
@@ -340,36 +340,36 @@ sudo a2enmod ssl
 Restart Apache
 
 sudo service apache2 restart
-
+```
 
 ![task4f](https://github.com/Asad-Ali-Code/Public-Key-Infrastructure/blob/main/task4f.PNG)
 
 As result
 
-![task4g](https://github.com/Asad-Ali-Code/Public-Key-Infrastructure/blob/main/task4g.PNG)
+![task4g](https://github.com/Qurat-ul-ainn/Crypto_pki/blob/main/27.PNG)
 
 # Task 5
-Generate a certificate for instagram.com
-use a password (e.g. I use seeddes):
-
+Generate a certificate for ```instagram.com```
+use a password (e.g. I use ```seeddes```):
+```
 openssl genrsa -aes128 -out instagram.key 1024
-
+```
 Use instagram.com as the common name of the certificate request:
-
+```
 openssl req -new -key instagram.key -out example.csr -config openssl.cnf
 openssl ca -in example.csr -out instafram.crt -cert ca.crt -keyfile ca.key \
 -config openssl.cnf
 cp instagram.key instagram.pem
 cat instagram.crt >> instagram.pem
-
+```
 Copy the certificate and private key to the website root folder:
-
+```
 sudo mkdir /var/www/instagram
 sudo cp instagram.crt instagram.pem /var/www/instagram
-
+```
 Config and start the server
 On the server VM, open /etc/apache2/sites-available/default-ssl.conf and add the following entry:
-
+```
 <VirtualHost *:443>
         ServerName instagram.com
         DocumentRoot /var/www/instagram
@@ -380,38 +380,38 @@ On the server VM, open /etc/apache2/sites-available/default-ssl.conf and add the
         SSLCertificateKeyFile /var/www/instagram/instagram.pem
 </VirtualHost>
 
-
+```
 ![task5a](https://github.com/Asad-Ali-Code/Public-Key-Infrastructure/blob/main/task5a.PNG)
 
 Restart Apache:
-
+```
 sudo apachectl configtest
 sudo service apache2 restart
-
+```
 Config on Victim VM
-On the victim VM, modify /etc/hosts by:
-
+On the victim VM, modify``` /etc/hosts``` by:
+```
 sudo vi /etc/hosts
-
+```
 add one line before the ending, which emulates a DNS cache positing attack:
-
+```
 127.0.0.1	instagram.com
-
-To get the ca.crt, listen on a local port like:
-
+```
+To get the ```ca.crt```, listen on a local port like:
+```
 nc -lvp 4444 > ca.crt
-
-Then on the server VM, we send ca.crt by:
-
+```
+Then on the server VM, we send ```ca.crt``` by:
+```
 cat ca.crt | nc 127.0.0.1 4444
-
+```
 Once we receive the file on the victim VM, we install it on Firefox as above.
 
 Now, when browsing https://instagram.com/, the user on this VM actually visit the fake website launched by the malicious server:
 
 # Task 6
 Based on Task 5, we can assume if the attacker stole ca.key, which indicates that he/she can easily generate the CA certificate ca.crt by the compromised key:
-
+```
 openssl req -new -x509 -keyout ca.key -out ca.crt -config openssl.cnf
-
+```
 Then, ca.crt can be used to sign any server's certificate, including the forged ones. The process of such attacks can be described as what we did before, except that we don't even need to deploy the ca.crt on the victim machine because it has already installed the same ca.crt
